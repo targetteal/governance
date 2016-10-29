@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -10,6 +11,15 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
+
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        // Permitir aos usuários se registrarem e efetuar logout.
+        // Você não deve adicionar a ação de "login" a lista de permissões.
+        // Isto pode causar problemas com o funcionamento normal do AuthComponent.
+        $this->Auth->allow(['signup', 'logout']);
+    }
 
     /**
      * Index method
@@ -49,21 +59,24 @@ class UsersController extends AppController
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function signup()
     {
-        $user = $this->Users->newEntity();
+        $data = $this->request->data;
+        $user = $this->Users->newEntity($data, ['associated' => ['Organization']]);
+
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->data);
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+            $user = $this->Users->patchEntity($user, $data, ['associated' => ['Organization']]);
+
+            if ($this->Users->save($user, ['associated' => ['Organization']])) {
+                $this->Flash->success(__('You have successfully signed up.'));
 
                 return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                die(var_dump($user->errors()));            
+                $this->Flash->error(__('There was an error. Please, try again.'));
             }
         }
-        $organizations = $this->Users->Organizations->find('list', ['limit' => 200]);
-        $this->set(compact('user', 'organizations'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
@@ -112,5 +125,25 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            } else {
+                $this->Flash->error(__('Username or password is incorrect'), [
+                    'key' => 'auth'
+                ]);
+            }
+        }
+    }
+
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
     }
 }

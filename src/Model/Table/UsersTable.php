@@ -36,7 +36,7 @@ class UsersTable extends Table
         $this->displayField('name');
         $this->primaryKey('id');
 
-        $this->belongsTo('Organizations', [
+        $this->belongsTo('Organization', [
             'foreignKey' => 'organization_id'
         ]);
     }
@@ -54,11 +54,14 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('name');
+            ->notEmpty('name');
+
+        $validator
+            ->notEmpty('password');
 
         $validator
             ->email('email')
-            ->allowEmpty('email');
+            ->notEmpty('email');
 
         return $validator;
     }
@@ -73,8 +76,6 @@ class UsersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['organization_id'], 'Organizations'));
-
         return $rules;
     }
 }

@@ -58,14 +58,29 @@ class OrganizationsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('name');
+            ->notEmpty('name');
 
         $validator
-            ->allowEmpty('shortname');
+            ->notEmpty('shortname')
+            ->custom('/^[a-zA-Z0-9_]*$/');
 
         $validator
-            ->allowEmpty('url');
+            ->allowEmpty('url')
+            ->url('url');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['shortname']));
+        return $rules;
     }
 }

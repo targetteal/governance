@@ -39,6 +39,7 @@ class RolesTable extends Table
         $this->belongsTo('Organizations', [
             'foreignKey' => 'organization_id'
         ]);
+
         $this->belongsTo('Parent', [
             'className' => 'Roles',
             'foreignKey' => 'parent_id',
@@ -47,7 +48,8 @@ class RolesTable extends Table
         $this->hasMany('SubRoles', [
             'className' => 'Roles',
             'foreignKey' => 'parent_id',
-            'propertyName' => 'roles'
+            'propertyName' => 'subroles',
+            'dependent' => true
         ]);
     }
 

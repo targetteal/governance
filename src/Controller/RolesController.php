@@ -39,9 +39,8 @@ class RolesController extends AppController
     public function view($id = null)
     {
         $role = $this->Roles->get($id, [
-            'contain' => ['Organizations']
+            'contain' => ['Organizations', 'Parent', 'SubRoles']
         ]);
-
         $this->set('role', $role);
         $this->set('_serialize', ['role']);
     }
