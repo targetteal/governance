@@ -36,7 +36,8 @@ class UsersTable extends Table
         $this->displayField('name');
         $this->primaryKey('id');
 
-        $this->belongsTo('Organization', [
+        $this->belongsTo('Organizations', [
+            'propertyName' => 'organization',
             'foreignKey' => 'organization_id'
         ]);
     }

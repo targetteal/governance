@@ -66,6 +66,10 @@ class RolesTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->integer('organization_id')
+            ->notEmpty('organization_id', 'create');
+
+        $validator
             ->allowEmpty('name');
 
         $validator

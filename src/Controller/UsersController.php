@@ -62,17 +62,16 @@ class UsersController extends AppController
     public function signup()
     {
         $data = $this->request->data;
-        $user = $this->Users->newEntity($data, ['associated' => ['Organization']]);
+        $user = $this->Users->newEntity($data, ['associated' => ['Organizations']]);
 
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $data, ['associated' => ['Organization']]);
+            $user = $this->Users->patchEntity($user, $data, ['associated' => ['Organizations']]);
 
-            if ($this->Users->save($user, ['associated' => ['Organization']])) {
+            if ($this->Users->save($user, ['associated' => ['Organizations']])) {
                 $this->Flash->success(__('You have successfully signed up.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'login']);
             } else {
-                die(var_dump($user->errors()));            
                 $this->Flash->error(__('There was an error. Please, try again.'));
             }
         }

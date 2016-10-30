@@ -8,8 +8,6 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Roles'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Organizations'), ['controller' => 'Organizations', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Organization'), ['controller' => 'Organizations', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="roles form large-9 medium-8 columns content">
@@ -18,7 +16,6 @@
         <legend><?= __('Edit Role') ?></legend>
         <?php
             echo $this->Form->input('name');
-            echo $this->Form->input('organization_id', ['options' => $organizations, 'empty' => true]);
             echo $this->Form->input('is_circle');
             echo $this->Form->input('parent_id', ['options' => $roles, 'empty' => '-']);
             echo $this->Form->input('purpose');

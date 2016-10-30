@@ -64,11 +64,20 @@ class AppController extends Controller
         ]);
     }
 
+    public function isAuthorized($user)
+    {
+        // Admin pode acessar todas as actions
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+        // Bloqueia acesso por padrão
+        return false;
+    }
+
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        // Simple setup
-        $this->Auth->config('authenticate', ['Form']);
+        
     }
 
     /**

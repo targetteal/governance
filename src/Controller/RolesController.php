@@ -11,6 +11,50 @@ use App\Controller\AppController;
 class RolesController extends AppController
 {
 
+    private function treeze(&$a, $parent_key, $children_key ) {
+        $orphans = true; $i;
+        while($orphans) {
+            $orphans = false;
+            foreach($a as $k => $v) {
+                // is there $a[$k] sons?
+                $sons = false;
+                foreach($a as $x => $y) {
+                    if (isset($y[$parent_key]) and $y[$parent_key] != false and $y[$parent_key] == $k) { 
+                        $sons = true; 
+                        $orphans = true; 
+                        break;
+                    }
+                }
+                // $a[$k] is a son, without children, so i can move it
+                if(!$sons and isset($v[$parent_key]) and $v[$parent_key] != false) {
+                    $a[$v[$parent_key]][$children_key][$k] = $v;
+                    unset($a[$k]);
+                }
+            }
+        }
+    }
+
+    public function tree() {
+        $allRoles = $this->Roles->find('all', [
+            'conditions' => ['Roles.organization_id' => $this->Auth->user('organization_id')], 
+            'orderBy' => 'Roles.parent_id'
+        ]);
+        $tree = [];
+        $rolesById = [];
+        foreach ($allRoles as $role) {
+            $rolesById[$role['id']] = [
+                'name' => $role['name'],
+                'parent_id' => $role['parent_id']
+            ];
+            if ($rolesById[$role['id']]['parent_id'] == null) {
+                unset($rolesById[$role['id']]['parent_id']);
+            }
+        }
+        
+        $this->treeze($rolesById, 'parent_id', 'children');
+        $this->set('tree', $rolesById);
+    }
+
     /**
      * Index method
      *
@@ -19,14 +63,13 @@ class RolesController extends AppController
     public function index()
     {
         $this->paginate = [
+            'conditions' => ['Roles.organization_id' => $this->Auth->user('organization_id')],
             'contain' => ['Organizations', 'Parent', 'SubRoles']
         ];
         $roles = $this->paginate($this->Roles);
 
         $this->set(compact('roles'));
         $this->set('_serialize', ['roles']);
-
-        //echo $this->Roles->get(2, ['contain' => ['Roles']]);
     }
 
     /**
@@ -55,6 +98,8 @@ class RolesController extends AppController
         $role = $this->Roles->newEntity();
         if ($this->request->is('post')) {
             $role = $this->Roles->patchEntity($role, $this->request->data);
+            $role->organization_id = $this->Auth->user('organization_id');
+
             if ($this->Roles->save($role)) {
                 $this->Flash->success(__('The role has been saved.'));
 

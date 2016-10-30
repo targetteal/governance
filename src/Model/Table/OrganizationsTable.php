@@ -62,7 +62,10 @@ class OrganizationsTable extends Table
 
         $validator
             ->notEmpty('shortname')
-            ->custom('/^[a-zA-Z0-9_]*$/');
+            ->add('reg_no', 'validFormat',[
+                'rule' => array('custom', '/[a-zA-Z0-9_]*$/'),
+                'message' => 'Only lowercase letters, numbers and underline are allowed.'
+            ]);
 
         $validator
             ->allowEmpty('url')
