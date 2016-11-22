@@ -39,13 +39,16 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-3 medium-4 columns">
             <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+                <h1><a href="#">Governance App</a></h1>
             </li>
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
+                <li><?= $this->Html->link(__('Login'), ['controller' => 'Users', 'action' => 'login'])?></li>
+                <?if ($loggedUser): ?>
+                    <li><?= $this->Html->link(__('Logout'), ['controller' => 'Users', 'action' => 'logout'])?></li>
+                <?endif;?>
+                <li><?= $this->Html->link(__('Signup'), ['controller' => 'Users', 'action' => 'signup'])?></li>
             </ul>
         </div>
     </nav>

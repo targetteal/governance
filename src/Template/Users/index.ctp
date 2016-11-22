@@ -1,13 +1,6 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Organizations'), ['controller' => 'Organizations', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Organization'), ['controller' => 'Organizations', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
+<?= $this->element('lateral_menu') ?>
 <div class="users index large-9 medium-8 columns content">
-    <h3><?= __('Users') ?></h3>
+    <h3><?= __('Users from your Organization') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

@@ -40,7 +40,7 @@
 		pointer-events: none;
 	}
 </style>
-<svg width="960" height="960"></svg>
+<svg width="600" style="width: 100%" height="600"></svg>
 <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 <script type="text/javascript">
 	var svg = d3.select("svg");

@@ -1,21 +1,14 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Organizations'), ['controller' => 'Organizations', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Organization'), ['controller' => 'Organizations', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
+<?= $this->element('lateral_menu') ?>
 <div class="users form large-9 medium-8 columns content">
     <?= $this->Form->create($user) ?>
     <fieldset>
-        <legend><?= __('Add User') ?></legend>
+        <legend><?= __('Add User to your Organization') ?></legend>
         <?php
-            echo $this->Form->input('name');
-            echo $this->Form->input('email');
-            echo $this->Form->input('organization_id', ['options' => $organizations, 'empty' => true]);
+            echo $this->Form->input('name', ['autocomplete' => 'off']);
+            echo $this->Form->input('email', ['autocomplete' => 'off']);
+            echo $this->Form->input('password', ['autocomplete' => 'off']);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Save')) ?>
     <?= $this->Form->end() ?>
 </div>

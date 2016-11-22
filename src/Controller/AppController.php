@@ -49,9 +49,8 @@ class AppController extends Controller
                 'action' => 'index'
             ],
             'logoutRedirect' => [
-                'controller' => 'Pages',
-                'action' => 'display',
-                'home'
+                'controller' => 'Users',
+                'action' => 'login'
             ],
             'authenticate' => [
                 'Form' => [
@@ -93,5 +92,6 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+        $this->set('loggedUser', $this->Auth->user());
     }
 }

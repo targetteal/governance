@@ -55,6 +55,10 @@ class RolesController extends AppController
         $this->set('tree', $rolesById);
     }
 
+    public function list() {
+        $this->tree();
+    }
+
     /**
      * Index method
      *
@@ -109,9 +113,18 @@ class RolesController extends AppController
             }
         }
         $organizations = $this->Roles->Organizations->find('list');
-        $roles = $this->Roles->find('list');
+        $roles = $this->getParentRolesList();
         $this->set(compact('role', 'organizations', 'roles'));
         $this->set('_serialize', ['role']);
+    }
+
+    private function getParentRolesList() {
+        return $this->Roles->find('list', [
+            'conditions' => [
+                'organization_id' => $this->Auth->user('organization_id'),
+                'is_circle' => true
+            ]
+        ]);
     }
 
     /**
@@ -136,7 +149,7 @@ class RolesController extends AppController
                 $this->Flash->error(__('The role could not be saved. Please, try again.'));
             }
         }
-        $organizations = $this->Roles->Organizations->find('list');
+        $organizations = $this->getParentRolesList();
         $roles = $this->Roles->find('list');
         $this->set(compact('role', 'organizations', 'roles'));
         $this->set('_serialize', ['role']);

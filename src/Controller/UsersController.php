@@ -29,10 +29,10 @@ class UsersController extends AppController
     public function index()
     {
         $this->paginate = [
+            'conditions' => ['Users.organization_id' => $this->Auth->user('organization_id')],
             'contain' => ['Organizations']
         ];
         $users = $this->paginate($this->Users);
-
         $this->set(compact('users'));
         $this->set('_serialize', ['users']);
     }
@@ -79,6 +79,25 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
 
+
+    public function add()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            $user->organization_id = $this->Auth->user('organization_id');
+
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('A new user has been added to your organization.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+
     /**
      * Edit method
      *
@@ -117,7 +136,10 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
+
+        if ($id == $this->Auth->user('id')) {
+            $this->Flash->error(__('You cannot delete your own user.'));
+        } else if ($this->Users->delete($user)) {
             $this->Flash->success(__('The user has been deleted.'));
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
