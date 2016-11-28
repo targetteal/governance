@@ -25,5 +25,16 @@
                 )
             ?></li>
         <?endif;?>
-    </ul>
+        <li class="heading"><?= __('Assignments') ?></li>
+        <li><?= $this->Html->link(__('New Assignment'), ['controller' => 'Assignments', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Assignments'), ['controller' => 'Assignments', 'action' => 'index']) ?></li>
+        <? if (isset($user) and $user->id): ?>
+            <li><?= $this->Html->link(__('Edit User'), ['controller' => 'Assignments', 'action' => 'edit', $user->id]) ?> </li>
+            <li><?= $this->Form->postLink(
+                    __('Delete'),
+                    ['controller' => 'Assignments', 'action' => 'delete', $user->id],
+                    ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]
+                )
+            ?></li>
+        <?endif;?>    </ul>
 </nav>
