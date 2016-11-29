@@ -3,7 +3,7 @@
         <li class="heading"><?= __('Roles') ?></li>
         <li><?= $this->Html->link(__('New Role'), ['controller' => 'Roles', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Roles'), ['controller' => 'Roles', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('Roles Holarchy'), ['controller' => 'Roles', 'action' => 'list']) ?></li>
+        <li><?= $this->Html->link(__('Roles Holarchy'), ['controller' => 'Roles', 'action' => 'nested']) ?></li>
         <? if (isset($role) and $role->id): ?>
 	        <li><?= $this->Html->link(__('Edit Role'), ['controller' => 'Roles', 'action' => 'edit', $role->id]) ?> </li>
 	        <li><?= $this->Form->postLink(

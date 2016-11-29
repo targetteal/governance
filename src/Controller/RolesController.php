@@ -55,7 +55,7 @@ class RolesController extends AppController
         $this->set('tree', $rolesById);
     }
 
-    public function list() {
+    public function nested() {
         $this->tree();
     }
 
